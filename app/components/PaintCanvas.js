@@ -476,18 +476,18 @@ export default function PaintCanvas({ isCommunityMode = false }) {
   return (
     <div className="fixed inset-0 z-50 bg-[#0A0A0A] flex flex-col font-sans select-none overflow-hidden text-white">
       {/* Top Window Bar */}
-      <div className="flex items-center gap-2 bg-[#FF2A2A] px-4 py-2 text-black text-xs font-black tracking-widest uppercase shadow-[0_2px_0_#8B0000] relative">
-        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <img src="/logo.png" className="w-5 h-5 object-contain" alt="icon" onError={(e) => e.target.style.display = 'none'} />
-          <span>{isCommunityMode ? 'Community Paint - Live' : 'Private Studio - WakeUpIndia'}</span>
+      <div className="flex items-center justify-between gap-1 sm:gap-2 bg-[#FF2A2A] px-2 sm:px-4 py-2 text-black text-[10px] sm:text-xs font-black tracking-widest uppercase shadow-[0_2px_0_#8B0000] relative w-full overflow-hidden">
+        <Link href="/" className="flex items-center gap-1 sm:gap-2 hover:opacity-80 transition-opacity whitespace-nowrap overflow-hidden text-ellipsis min-w-0">
+          <img src="/logo.png" className="w-4 h-4 sm:w-5 sm:h-5 object-contain flex-shrink-0" alt="icon" onError={(e) => e.target.style.display = 'none'} />
+          <span className="truncate">{isCommunityMode ? 'Community Paint - Live' : 'Private Studio - WakeUpIndia'}</span>
         </Link>
         {isCommunityMode && (
-          <span className="ml-4 flex items-center gap-1 animate-pulse border-l-2 border-black pl-4">
-            <Users size={14} /> {liveUsers} LIVE
+          <span className="ml-1 sm:ml-4 flex items-center gap-1 animate-pulse border-l-2 border-black pl-1 sm:pl-4 whitespace-nowrap flex-shrink-0">
+            <Users size={12} className="sm:w-[14px] sm:h-[14px]" /> {liveUsers} LIVE
           </span>
         )}
-        <div className="ml-auto">
-           <Link href="/" className="bg-black text-[#FF2A2A] px-3 py-1 font-bold border-2 border-black hover:bg-transparent hover:text-black transition-colors shadow-[2px_2px_0_rgba(0,0,0,0.5)]">
+        <div className="ml-auto flex-shrink-0 pl-2">
+           <Link href="/" className="bg-black text-[#FF2A2A] px-2 sm:px-3 py-1 font-bold border-2 border-black hover:bg-transparent hover:text-black transition-colors shadow-[2px_2px_0_rgba(0,0,0,0.5)]">
              HOME
            </Link>
         </div>
@@ -501,59 +501,76 @@ export default function PaintCanvas({ isCommunityMode = false }) {
       )}
       
       {/* Action Bar (Replaces fake menu) */}
-      <div className="flex items-center gap-4 px-4 py-3 bg-[#111] border-b-2 border-[#333] text-xs font-bold uppercase tracking-widest relative z-10 shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
-        <div className="flex items-center gap-2">
-          <span className="text-[#FF2A2A]">Target:</span>
+      <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-stretch sm:items-center gap-1 sm:gap-4 px-1 sm:px-4 py-1.5 sm:py-3 bg-[#111] border-b-2 border-[#333] text-[9px] sm:text-xs font-bold uppercase tracking-widest relative z-10 shadow-[0_4px_10px_rgba(0,0,0,0.5)] w-full overflow-hidden">
+        <div className="flex items-center bg-black border-2 border-[#333] shadow-[2px_2px_0_#222] min-w-0 px-1">
+          <span className="text-[#FF2A2A] hidden sm:inline mr-2">Target:</span>
           <select 
             value={selectedTemplate} 
             onChange={(e) => setSelectedTemplate(e.target.value)}
-            className="bg-black border-2 border-[#333] text-white p-1.5 outline-none focus:border-[#FF2A2A] cursor-pointer shadow-[2px_2px_0_#222]"
+            className="bg-transparent text-white w-full outline-none py-1 sm:py-1.5 cursor-pointer text-[10px] sm:text-xs truncate"
           >
-            {templates.map(t => <option key={t.src} value={t.src}>{t.name}</option>)}
+            {templates.map(t => <option key={t.src} value={t.src} className="bg-[#111] text-white">{t.name}</option>)}
           </select>
         </div>
 
-        <div className="flex items-center gap-2 ml-4">
-          <span className="text-[#FF2A2A]">Alias:</span>
+        <div className="flex items-center bg-black border-2 border-[#333] shadow-[2px_2px_0_#222] min-w-0 px-1">
+          <span className="text-[#FF2A2A] hidden sm:inline mr-2">Alias:</span>
           <input 
             type="text" 
             value={artistName} 
             onChange={e => { setArtistName(e.target.value); setIsSaved(false); }}
-            className="bg-black border-2 border-[#333] text-white p-1.5 px-3 w-40 outline-none focus:border-[#FF2A2A] shadow-[2px_2px_0_#222]"
-            placeholder="Anonymous"
+            className="bg-transparent text-white w-full outline-none py-1 sm:py-1.5 text-[10px] sm:text-xs placeholder-[#666]"
+            placeholder="Artist Alias"
           />
         </div>
 
+        <div className="flex items-center bg-black border-2 border-[#333] shadow-[2px_2px_0_#222] min-w-0 px-1">
+          <span className="text-[#FF2A2A] hidden sm:inline mr-2">Brush Size:</span>
+          <span className="text-[#FF2A2A] sm:hidden text-[8px] mr-1 font-bold">BRUSH:</span>
+          <select 
+            value={brushSize} 
+            onChange={(e) => setBrushSize(parseInt(e.target.value))}
+            className="bg-transparent text-white w-full outline-none py-1 sm:py-1.5 cursor-pointer text-[10px] sm:text-xs truncate"
+          >
+            <option value="2" className="bg-[#111] text-white">Smallest</option>
+            <option value="5" className="bg-[#111] text-white">Small</option>
+            <option value="10" className="bg-[#111] text-white">Medium</option>
+            <option value="20" className="bg-[#111] text-white">Large</option>
+            <option value="30" className="bg-[#111] text-white">Largest</option>
+          </select>
+        </div>
+
         {tool === 'text' && (
-          <div className="flex items-center gap-2 ml-4 border-l-2 border-[#333] pl-4">
-             <span className="text-white">Text:</span>
+          <div className="flex items-center bg-black border-2 border-[#FF2A2A] shadow-[2px_2px_0_#8B0000] min-w-0 px-1 col-span-2 sm:col-span-1 mt-0.5 sm:mt-0">
+             <span className="text-white hidden sm:inline mr-2">Text:</span>
              <input 
                value={textInput} 
                onChange={e => setTextInput(e.target.value)} 
-               className="bg-black border-2 border-[#FF2A2A] text-white p-1.5 px-3 w-40 outline-none shadow-[2px_2px_0_#8B0000]" 
+               className="bg-transparent text-white w-full outline-none py-1 sm:py-1.5 text-[10px] sm:text-xs placeholder-[#666]" 
+               placeholder="Type text..."
                maxLength={20}
              />
           </div>
         )}
 
         {tool === 'sticker' && (
-          <div className="flex items-center gap-2 ml-4 border-l-2 border-[#333] pl-4 relative">
-             <span className="text-white">Emoji:</span>
+          <div className="flex items-center gap-1 bg-black border-2 border-[#FF2A2A] shadow-[2px_2px_0_#8B0000] min-w-0 px-1 py-0.5 col-span-2 sm:col-span-1 mt-0.5 sm:mt-0 relative">
+             <span className="text-white hidden sm:inline">Emoji:</span>
              <input 
                value={selectedSticker} 
                readOnly
                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-               className="bg-black border-2 border-[#FF2A2A] text-white p-1.5 px-2 w-16 text-center outline-none shadow-[2px_2px_0_#8B0000] cursor-pointer text-xl" 
+               className="bg-transparent text-white w-full text-center outline-none cursor-pointer text-sm sm:text-xl flex-1" 
              />
              <button 
                onClick={() => setShowEmojiPicker(!showEmojiPicker)} 
-               className="bg-[#333] text-white px-3 py-1.5 text-xs font-bold border-2 border-black shadow-[2px_2px_0_#111] hover:bg-[#444] active:translate-y-1 active:translate-x-1 active:shadow-none"
+               className="bg-[#333] text-white px-2 py-1 text-[9px] sm:text-xs font-bold border border-black shadow-[1px_1px_0_#111] hover:bg-[#444] whitespace-nowrap"
              >
                PICK
              </button>
              
              {showEmojiPicker && (
-               <div className="absolute top-12 left-0 mt-2 z-50 shadow-[4px_4px_10px_rgba(0,0,0,0.8)] border-4 border-[#333]">
+               <div className="absolute top-10 sm:top-12 left-0 mt-2 z-50 shadow-[4px_4px_10px_rgba(0,0,0,0.8)] border-4 border-[#333]">
                  <EmojiPicker 
                    theme="dark" 
                    onEmojiClick={(emojiData) => {
@@ -566,30 +583,30 @@ export default function PaintCanvas({ isCommunityMode = false }) {
           </div>
         )}
 
-        <div className="ml-auto flex gap-3 relative">
-          <button onClick={saveToGallery} className="bg-white text-black px-4 py-2 border-2 border-black shadow-[3px_3px_0_#999] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all flex items-center gap-2">
-            SHARE PUBLIC
+        <div className="col-span-2 sm:col-span-1 ml-0 sm:ml-auto flex justify-between sm:justify-start gap-1 sm:gap-3 relative w-full sm:w-auto mt-0.5 sm:mt-0">
+          <button onClick={saveToGallery} className="flex-1 sm:flex-none justify-center bg-white text-black px-2 sm:px-4 py-1.5 sm:py-2 border-2 border-black shadow-[2px_2px_0_#999] sm:shadow-[3px_3px_0_#999] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all flex items-center gap-1 sm:gap-2 text-[10px] sm:text-xs whitespace-nowrap">
+            SHARE <span className="hidden sm:inline">PUBLIC</span>
           </button>
-          <div className="relative">
+          <div className="relative flex-1 sm:flex-none">
             <button 
               onClick={() => setShowExportMenu(!showExportMenu)} 
-              className="bg-[#FF2A2A] text-black px-4 py-2 border-2 border-black shadow-[3px_3px_0_#8B0000] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all flex items-center gap-2"
+              className="w-full justify-center bg-[#FF2A2A] text-black px-2 sm:px-4 py-1.5 sm:py-2 border-2 border-black shadow-[2px_2px_0_#8B0000] sm:shadow-[3px_3px_0_#8B0000] active:translate-y-1 active:translate-x-1 active:shadow-none transition-all flex items-center gap-1 sm:gap-2 text-[10px] sm:text-xs whitespace-nowrap"
             >
-              <Download size={14} /> EXPORT / SHARE
+              <Download size={14} className="hidden sm:block" /> EXPORT
             </button>
             {showExportMenu && (
-              <div className="absolute top-full right-0 mt-3 bg-black border-2 border-[#FF2A2A] shadow-[4px_4px_0_#8B0000] z-50 flex flex-col w-[240px]">
+              <div className="absolute top-full right-0 mt-3 bg-black border-2 border-[#FF2A2A] shadow-[4px_4px_0_#8B0000] z-50 flex flex-col w-[200px] sm:w-[240px]">
                 <button 
                   onClick={() => exportImage('download')} 
                   className="px-4 py-3 text-white text-left font-bold border-b border-[#333] hover:bg-[#111] hover:text-[#FF2A2A] transition-colors"
                 >
-                  ⬇️ Download Image
+                  ⬇️ Download
                 </button>
                 <button 
                   onClick={() => exportImage('share')} 
                   className="px-4 py-3 text-white text-left font-bold hover:bg-[#111] hover:text-[#FF2A2A] transition-colors"
                 >
-                  📱 Share to Insta / WhatsApp
+                  📱 Share Apps
                 </button>
               </div>
             )}
@@ -597,44 +614,33 @@ export default function PaintCanvas({ isCommunityMode = false }) {
         </div>
       </div>
 
-      <div className="flex flex-1 min-h-0 bg-[#050505] relative z-0">
-        {/* Left Toolbar */}
-        <div className="w-16 bg-[#111] border-r-2 border-[#333] flex flex-col items-center p-2 gap-3 shrink-0 shadow-[4px_0_10px_rgba(0,0,0,0.5)] z-10">
-          <button onClick={() => setTool('brush')} className={`w-12 h-12 flex items-center justify-center border-2 transition-all text-xl ${tool === 'brush' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_10px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Brush">🖌️</button>
-          <button onClick={() => setTool('spray')} className={`w-12 h-12 flex items-center justify-center border-2 transition-all text-xl ${tool === 'spray' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_10px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Spray">💨</button>
-          <button onClick={() => setTool('eraser')} className={`w-12 h-12 flex items-center justify-center border-2 transition-all text-xl ${tool === 'eraser' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_10px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Eraser">🧹</button>
-          <button onClick={() => setTool('text')} className={`w-12 h-12 flex items-center justify-center border-2 transition-all text-xl font-bold font-serif ${tool === 'text' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_10px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Text">T</button>
-          <button onClick={() => setTool('sticker')} className={`w-12 h-12 flex items-center justify-center border-2 transition-all text-xl ${tool === 'sticker' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_10px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Stickers">⭐</button>
-
-          <div className="mt-4 border-2 border-[#333] bg-black p-1 flex flex-col items-center py-4 w-full shadow-[2px_2px_0_#222]">
-            <span className="text-[10px] mb-6 font-bold text-[#FF2A2A] tracking-widest">SIZE</span>
-            <div className="h-24 w-full flex items-center justify-center">
-              <input 
-                type="range" 
-                min="1" 
-                max="32" 
-                value={brushSize} 
-                onChange={(e) => setBrushSize(Number(e.target.value))} 
-                className="w-24 accent-[#FF2A2A] -rotate-90 transform origin-center cursor-pointer" 
-              />
-            </div>
-            <span className="text-white text-xs mt-6 font-mono">{brushSize}px</span>
+      <div className="flex flex-col sm:flex-row flex-1 min-h-0 bg-[#050505] relative z-0">
+        {/* Toolbar (Bottom on mobile, Left on desktop) */}
+        <div className="order-last sm:order-first w-full sm:w-16 bg-[#111] border-t-2 sm:border-t-0 sm:border-r-2 border-[#333] p-1.5 sm:p-2 flex flex-col items-stretch gap-1.5 sm:gap-3 shrink-0 shadow-[0_-4px_10px_rgba(0,0,0,0.5)] sm:shadow-[4px_0_10px_rgba(0,0,0,0.5)] z-10">
+          
+          <div className="grid grid-cols-5 sm:flex sm:flex-col gap-1.5 sm:gap-2">
+            <button onClick={() => setTool('brush')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 ${tool === 'brush' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Brush">🖌️</button>
+            <button onClick={() => setTool('spray')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 ${tool === 'spray' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Spray">💨</button>
+            <button onClick={() => setTool('eraser')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 ${tool === 'eraser' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Eraser">🧹</button>
+            <button onClick={() => setTool('text')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 font-bold font-serif ${tool === 'text' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Text">T</button>
+            <button onClick={() => setTool('sticker')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 ${tool === 'sticker' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Stickers">⭐</button>
           </div>
-
-          <div className="mt-auto w-full flex flex-col gap-2">
-            <button onClick={handleUndo} className="w-full text-xs font-bold tracking-widest border-2 border-[#333] bg-transparent py-3 text-white hover:bg-black hover:text-[#FF2A2A] hover:border-[#FF2A2A] transition-colors">UNDO</button>
-            <button onClick={clearCanvas} className="w-full text-xs font-bold tracking-widest border-2 border-[#333] bg-transparent py-3 text-white hover:bg-[#FF2A2A] hover:text-black hover:border-[#FF2A2A] transition-colors">CLEAR</button>
+          
+          <div className="grid grid-cols-2 sm:flex sm:flex-col gap-1.5 sm:gap-2 sm:mt-auto">
+            <button onClick={handleUndo} className="w-full py-2 sm:h-auto sm:w-full text-[10px] sm:text-xs font-bold tracking-widest border-2 border-[#333] bg-transparent sm:py-3 text-white hover:bg-black hover:text-[#FF2A2A] transition-colors">UNDO</button>
+            <button onClick={clearCanvas} className="w-full py-2 sm:h-auto sm:w-full text-[10px] sm:text-xs font-bold tracking-widest border-2 border-[#333] bg-transparent sm:py-3 text-white hover:bg-[#FF2A2A] hover:text-black transition-colors">CLEAR</button>
           </div>
+          
         </div>
         
         {/* Canvas Area */}
-        <div className="flex-1 overflow-auto bg-[#000] p-6 relative flex justify-center items-center shadow-[inset_0_0_40px_rgba(255,42,42,0.05)]">
+        <div className="flex-1 overflow-auto bg-[#000] p-2 sm:p-6 relative flex justify-center items-center shadow-[inset_0_0_40px_rgba(255,42,42,0.05)]">
           {/* Gritty Noise Overlay for Canvas Container */}
           <div 
             className="pointer-events-none absolute inset-0 opacity-20 z-10" 
             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
           ></div>
-          <div className="bg-black border-4 border-[#1A1A1A] shadow-[12px_12px_0_#FF2A2A] relative z-20 w-full h-full max-w-[1400px] max-h-[900px] overflow-hidden flex items-center justify-center">
+          <div className="bg-black border-2 sm:border-4 border-[#1A1A1A] shadow-[8px_8px_0_#FF2A2A] sm:shadow-[12px_12px_0_#FF2A2A] relative z-20 w-full h-full max-w-[1400px] max-h-[900px] overflow-hidden flex items-center justify-center">
             <canvas
                 ref={canvasRef}
                 className={`block max-w-full max-h-full touch-none bg-black ${tool === 'spray' ? 'cursor-cell' : 'cursor-crosshair'}`}
@@ -649,21 +655,23 @@ export default function PaintCanvas({ isCommunityMode = false }) {
       </div>
       
       {/* Bottom Color Palette */}
-      <div className="h-24 bg-[#111] border-t-2 border-[#333] shrink-0 flex items-center px-4 gap-8 shadow-[0_-4px_10px_rgba(0,0,0,0.5)] relative z-10">
-        <div className="flex items-center gap-6 bg-black border-2 border-[#333] p-3 shadow-[4px_4px_0_#222]">
-          <div className="w-12 h-12 border-2 border-[#555] relative flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.15)]" style={{ backgroundColor: color }}>
+      <div className="h-16 sm:h-24 bg-[#111] border-t-2 border-[#333] shrink-0 flex items-center justify-between sm:justify-start px-2 sm:px-4 gap-2 sm:gap-8 shadow-[0_-4px_10px_rgba(0,0,0,0.5)] relative z-10">
+        <div className="flex items-center gap-2 sm:gap-6 bg-black border-2 border-[#333] p-1.5 sm:p-3 shadow-[2px_2px_0_#222] sm:shadow-[4px_4px_0_#222]">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-[#555] relative flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.15)]" style={{ backgroundColor: color }}>
             <input type="color" value={color} onChange={(e) => {setColor(e.target.value); if (tool === 'eraser') setTool('brush');}} className="absolute inset-0 opacity-0 cursor-pointer w-full h-full" title="Custom color" />
           </div>
-          <div className="flex flex-wrap gap-2 max-w-[500px]">
+          <span className="sm:hidden text-white font-bold text-[10px] uppercase ml-1 mr-2">Color</span>
+          
+          <div className="hidden sm:flex flex-wrap gap-2 max-w-[500px]">
             {palette.concat(['#FFF', '#CCC', '#808080', '#000080', '#008000', '#800080', '#008080', '#808000', '#00FFFF', '#FF00FF', '#FFFF00', '#00FF00', '#0000FF', '#FF0000', '#800000', '#111']).slice(0, 24).map((swatch, idx) => (
               <button key={idx} onClick={() => {setColor(swatch); if (tool === 'eraser') setTool('brush');}} className={`w-8 h-8 border-2 transition-transform hover:scale-110 ${color === swatch ? 'border-white shadow-[0_0_8px_rgba(255,255,255,0.6)] z-10 relative' : 'border-[#333]'}`} style={{ backgroundColor: swatch }}></button>
             ))}
           </div>
         </div>
         
-        <div className="ml-auto flex flex-col text-right gap-1 pr-4">
-          <span className="text-[#FF2A2A] font-bold text-xs uppercase tracking-widest border-b border-[#333] pb-1 mb-1">Status Log</span>
-          <span className="text-sm font-mono text-[#999]">{status}</span>
+        <div className="flex flex-col text-right gap-0 sm:gap-1 pr-1 sm:pr-4">
+          <span className="text-[#FF2A2A] font-bold text-[10px] sm:text-xs uppercase tracking-widest border-b border-[#333] pb-0.5 sm:pb-1 mb-0.5 sm:mb-1">Status Log</span>
+          <span className="text-[9px] sm:text-sm font-mono text-[#999]">{status}</span>
         </div>
       </div>
     </div>
