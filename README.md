@@ -3,7 +3,7 @@
 **A Collaborative Digital Protest Canvas**
 
 <p align="center">
-  <img src="./assets/banner.jpg" alt="Wake Up India banner" width="100%" />
+  <img src="./app/assets/banner.jpg" alt="Wake Up India banner" width="100%" />
 </p>
 
 ## The Movement
