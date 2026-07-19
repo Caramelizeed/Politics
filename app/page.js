@@ -7,7 +7,7 @@ import { ArrowRight, Flame } from 'lucide-react';
 const features = [
   {
     title: 'Expose',
-    copy: 'Bring the truth to light. Every stroke is a visible public record of dissent against corruption.',
+    copy: 'Bring the truth to light. Every stroke is a visible public record of dissent against corruption.RIOT',
     image: '/images/Modi.png',
     side: 'left',
   },
