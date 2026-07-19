@@ -379,28 +379,28 @@ export default function PaintCanvas({ isCommunityMode = false }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCommunityMode, strokeCount]);
 
-  const validateArtist = () => {
-    if (!artistName.trim() || artistName.trim().toLowerCase() === 'guest artist') {
-      alert("Please enter an Artist Alias first. We need to know who is taking a stand.");
-      return false;
+  const getArtistLabel = () => {
+    const trimmed = artistName.trim();
+    if (!trimmed || trimmed.toLowerCase() === 'guest artist') {
+      return 'Anonymous Activist';
     }
-    return true;
+    return trimmed;
   };
 
   const saveToGallery = () => {
     if (typeof window === 'undefined') return;
-    if (!validateArtist()) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const dataUrl = canvas.toDataURL('image/png');
+    const artistLabel = getArtistLabel();
 
     const existing = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
     const entry = {
       id: Date.now(),
-      title: `${artistName.trim()}'s work`,
-      author: artistName.trim(),
+      title: `${artistLabel}'s work`,
+      author: artistLabel,
       dataUrl,
       createdAt: new Date().toLocaleDateString(),
     };
@@ -413,8 +413,7 @@ export default function PaintCanvas({ isCommunityMode = false }) {
 
   const exportImage = async (action) => {
     if (typeof window === 'undefined') return;
-    if (!validateArtist()) return;
-    
+
     setShowExportMenu(false);
 
     const canvas = canvasRef.current;
@@ -423,8 +422,9 @@ export default function PaintCanvas({ isCommunityMode = false }) {
     const instaCanvas = document.createElement('canvas');
     const size = Math.max(canvas.width, canvas.height);
     instaCanvas.width = size;
-    instaCanvas.height = size + 60; 
+    instaCanvas.height = size + 60;
     const ctx = instaCanvas.getContext('2d');
+    if (!ctx) return;
 
     ctx.fillStyle = '#090909';
     ctx.fillRect(0, 0, instaCanvas.width, instaCanvas.height);
@@ -433,20 +433,26 @@ export default function PaintCanvas({ isCommunityMode = false }) {
     const offsetY = (size - canvas.height) / 2;
     ctx.drawImage(canvas, offsetX, offsetY);
 
+    const artistLabel = getArtistLabel();
     ctx.textAlign = 'right';
     ctx.font = 'bold 28px "Courier New", Courier, monospace';
     ctx.fillStyle = '#FF2A2A';
-    ctx.fillText(`ARTIST: ${artistName.trim().toUpperCase()}`, instaCanvas.width - 20, instaCanvas.height - 30);
-    
+    ctx.fillText(`ARTIST: ${artistLabel.toUpperCase()}`, instaCanvas.width - 20, instaCanvas.height - 30);
+
     ctx.font = 'bold 16px "Courier New", Courier, monospace';
     ctx.fillStyle = '#FFFFFF';
     ctx.fillText('#WAKEUPINDIA', instaCanvas.width - 20, instaCanvas.height - 10);
 
-    const dataUrl = instaCanvas.toDataURL('image/png');
-    
     try {
-      const blob = await (await fetch(dataUrl)).blob();
-      const file = new File([blob], `wakeupindia-${artistName.trim().replace(/\s+/g, '-')}.png`, { type: 'image/png' });
+      const blob = await new Promise((resolve, reject) => {
+        instaCanvas.toBlob((result) => {
+          if (result) resolve(result);
+          else reject(new Error('Canvas export failed.'));
+        }, 'image/png');
+      });
+
+      const fileName = `wakeupindia-${artistLabel.toLowerCase().replace(/\s+/g, '-')}.png`;
+      const file = new File([blob], fileName, { type: 'image/png' });
 
       if (action === 'share') {
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -461,14 +467,18 @@ export default function PaintCanvas({ isCommunityMode = false }) {
           setStatus('Share unsupported.');
         }
       } else {
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.download = file.name;
-        link.href = dataUrl;
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
         link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
         setStatus('Image downloaded.');
       }
     } catch (error) {
-      console.error("Error exporting:", error);
+      console.error('Error exporting:', error);
       setStatus('Export cancelled/failed.');
     }
   };
