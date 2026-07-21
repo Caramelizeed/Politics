@@ -75,6 +75,7 @@ export default function PaintCanvas({ isCommunityMode = false }) {
     ctx.lineJoin = 'round';
 
     const img = new window.Image();
+    img.crossOrigin = 'anonymous';
     img.onload = () => {
       ctx.clearRect(0, 0, width, height);
 
@@ -511,7 +512,7 @@ export default function PaintCanvas({ isCommunityMode = false }) {
       )}
       
       {/* Action Bar (Replaces fake menu) */}
-      <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-stretch sm:items-center gap-1 sm:gap-4 px-1 sm:px-4 py-1.5 sm:py-3 bg-[#111] border-b-2 border-[#333] text-[9px] sm:text-xs font-bold uppercase tracking-widest relative z-10 shadow-[0_4px_10px_rgba(0,0,0,0.5)] w-full overflow-hidden">
+      <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-stretch sm:items-center gap-1 sm:gap-4 px-1 sm:px-4 py-1.5 sm:py-3 bg-[#111] border-b-2 border-[#333] text-[9px] sm:text-xs font-bold uppercase tracking-widest relative z-[60] shadow-[0_4px_10px_rgba(0,0,0,0.5)] w-full overflow-visible">
         <div className="flex items-center bg-black border-2 border-[#333] shadow-[2px_2px_0_#222] min-w-0 px-1">
           <span className="text-[#FF2A2A] hidden sm:inline mr-2">Target:</span>
           <select 
