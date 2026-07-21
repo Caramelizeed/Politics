@@ -505,7 +505,7 @@ export default function PaintCanvas({ isCommunityMode = false }) {
       </div>
       
       {toastMessage && (
-        <div className="fixed top-14 left-1/2 transform -translate-x-1/2 z-50 bg-[#111] border-2 border-[#FF2A2A] text-white px-6 py-3 shadow-[8px_8px_0_rgba(255,42,42,0.8)] font-mono text-sm flex items-center gap-3 animate-pulse">
+        <div className="fixed top-14 left-1/2 transform -translate-x-1/2 z-[100] bg-[#111] border-2 border-[#FF2A2A] text-white px-6 py-3 shadow-[8px_8px_0_rgba(255,42,42,0.8)] font-mono text-sm flex items-center gap-3 animate-pulse">
           <span className="text-[#FF2A2A] font-bold text-lg">!</span>
           {toastMessage}
         </div>
