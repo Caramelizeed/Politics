@@ -581,9 +581,11 @@ export default function PaintCanvas({ isCommunityMode = false }) {
              </button>
              
              {showEmojiPicker && (
-               <div className="absolute top-10 sm:top-12 left-0 mt-2 z-50 shadow-[4px_4px_10px_rgba(0,0,0,0.8)] border-4 border-[#333]">
+               <div className="absolute top-10 sm:top-12 left-0 sm:left-auto mt-2 z-50 shadow-[4px_4px_10px_rgba(0,0,0,0.8)] border-4 border-[#333] max-w-[95vw]">
                  <EmojiPicker 
                    theme="dark" 
+                   width={300}
+                   height={400}
                    onEmojiClick={(emojiData) => {
                      setSelectedSticker(emojiData.emoji);
                      setShowEmojiPicker(false);
