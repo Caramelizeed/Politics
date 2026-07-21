@@ -27,7 +27,7 @@ export default function PaintCanvas({ isCommunityMode = false }) {
     }
   }, []);
   
-  const [tool, setTool] = useState('brush');
+  const [tool, setTool] = useState(isCommunityMode ? 'text' : 'brush');
   const [color, setColor] = useState('#FF2A2A');
   const [brushSize, setBrushSize] = useState(4);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -631,10 +631,14 @@ export default function PaintCanvas({ isCommunityMode = false }) {
         {/* Toolbar (Bottom on mobile, Left on desktop) */}
         <div className="order-last sm:order-first w-full sm:w-16 bg-[#111] border-t-2 sm:border-t-0 sm:border-r-2 border-[#333] p-1.5 sm:p-2 flex flex-col items-stretch gap-1.5 sm:gap-3 shrink-0 shadow-[0_-4px_10px_rgba(0,0,0,0.5)] sm:shadow-[4px_0_10px_rgba(0,0,0,0.5)] z-10">
           
-          <div className="grid grid-cols-5 sm:flex sm:flex-col gap-1.5 sm:gap-2">
-            <button onClick={() => setTool('brush')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 ${tool === 'brush' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Brush">🖌️</button>
-            <button onClick={() => setTool('spray')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 ${tool === 'spray' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Spray">💨</button>
-            <button onClick={() => setTool('eraser')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 ${tool === 'eraser' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Eraser">🧹</button>
+          <div className={`grid ${isCommunityMode ? 'grid-cols-2' : 'grid-cols-5'} sm:flex sm:flex-col gap-1.5 sm:gap-2`}>
+            {!isCommunityMode && (
+              <>
+                <button onClick={() => setTool('brush')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 ${tool === 'brush' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Brush">🖌️</button>
+                <button onClick={() => setTool('spray')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 ${tool === 'spray' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Spray">💨</button>
+                <button onClick={() => setTool('eraser')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 ${tool === 'eraser' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Eraser">🧹</button>
+              </>
+            )}
             <button onClick={() => setTool('text')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 font-bold font-serif ${tool === 'text' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Text">T</button>
             <button onClick={() => setTool('sticker')} className={`w-full aspect-square sm:aspect-auto sm:w-12 sm:h-12 flex items-center justify-center border-2 transition-all text-sm sm:text-xl shrink-0 ${tool === 'sticker' ? 'border-[#FF2A2A] bg-black text-[#FF2A2A] shadow-[inset_0_0_5px_rgba(255,42,42,0.5)]' : 'border-[#333] bg-transparent text-white hover:border-[#666]'}`} title="Stickers">⭐</button>
           </div>
